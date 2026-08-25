@@ -1,5 +1,13 @@
-// Punto 1 – Gestione dei file (modulo: fs)
-// Punto 3 – Elaborazione tramite Stream (modulo: stream)
+/*1. Gestione dei file:
+leggere un file di testo scelto dall’utente;
+creare una copia del file trasformandone il contenuto (ad esempio in maiuscolo);
+salvare il risultato in una nuova cartella di output.
+Modulo richiesto: fs */
+
+/*3. Elaborazione tramite Stream
+La trasformazione del contenuto del file dovrà essere effettuata utilizzando gli Stream, evitando di caricare l’intero file in memoria.
+Modulo richiesto: stream*/
+
 const fs = require('fs');
 const { Transform } = require('stream');
 const { pipeline } = require('stream/promises');
@@ -23,7 +31,7 @@ async function readTextFile(filePath) {
   return fs.promises.readFile(filePath, 'utf8');
 }
 
-/* Crea la cartella di output (e le eventuali cartelle intermedie) se non esiste.*/
+// Crea la cartella di output (e le eventuali cartelle intermedie) se non esiste.
 async function ensureDir(dirPath) {
   await fs.promises.mkdir(dirPath, { recursive: true });
 }
@@ -41,7 +49,7 @@ async function createUpperCaseCopy(inputPath, outputPath) {
   return outputPath;
 }
 
-/* Restituisce true se il file esiste. */
+//Restituisce true se il file esiste. 
 function fileExists(filePath) {
   return fs.existsSync(filePath);
 }

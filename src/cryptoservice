@@ -1,8 +1,9 @@
-//Implementare le seguenti funzionalità:
-//calcolo dell'hash SHA-256 del file;
-//cifratura del file;
-//(facoltativo) decifratura del file.
-// Modulo richiesto: crypto
+/*5. Sicurezza
+Implementare le seguenti funzionalità:
+calcolo dell’hash SHA-256 del file;
+cifratura del file;
+(facoltativo) decifratura del file.
+Modulo richiesto: crypto */
 const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');

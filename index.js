@@ -15,7 +15,7 @@ const rl = readline.createInterface({
   output: process.stdout,
 });
 
-/** Versione Promise di rl.question, così possiamo usare await. */
+// Versione Promise di rl.question per poter usare async/await.
 function ask(question) {
   return new Promise((resolve) => rl.question(question, resolve));
 }
@@ -71,12 +71,20 @@ async function main() {
       }
       case '3':
         if (!fileService.fileExists(paths.upper)) {
-        console.log("Esegui prima l'operazione 1 per generare il file elaborato.");
+            console.log("Esegui prima l'operazione 1 per generare il file elaborato.");
         break;
+        }else{
+            await cryptoService.runCryptoDemo(paths.upper, ask);
+            break;
         }
-     await cryptoService.runCryptoDemo(paths.upper, ask);
-    break;
-        cryptoService.runCryptoDemo(paths.upper);
+      case '4':
+        console.log('TODO: punto 6 (os)');
+        break;
+      case '5':
+        console.log('TODO: punti 7 e 8 (http, url)');
+        break;
+      case '6':
+        console.log('TODO: punto 9 (timers)');
         break;
       case '4':
         console.log('TODO: punto 6 (os)');

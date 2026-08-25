@@ -1,14 +1,13 @@
-// Punto 2 – Gestione dei percorsi (modulo: path)
-// Tutti i percorsi del progetto vengono costruiti qui, in modo indipendente dal SO.
+/*2. Gestione dei percorsi
+Tutti i percorsi dei file dovranno essere costruiti in modo indipendente dal sistema operativo.
+Modulo richiesto: path*/
 const path = require('path');
 
 const ROOT_DIR = path.resolve(__dirname, '..');
 const INPUT_DIR = path.join(ROOT_DIR, 'input');
 const OUTPUT_DIR = path.join(ROOT_DIR, 'output');
 
-/* Restituisce tutti i percorsi derivati da un nome file di input.
- * Es. "esempio.txt" -> esempio.upper.txt, esempio.enc, esempio.dec.txt
- */
+//Restituisce tutti i percorsi derivati da un nome file di input.
 function buildPaths(fileName) {
   const { name, ext } = path.parse(fileName);
   return {
