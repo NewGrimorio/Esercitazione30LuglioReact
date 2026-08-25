@@ -1,6 +1,6 @@
 /*2. Gestione dei percorsi
 Tutti i percorsi dei file dovranno essere costruiti in modo indipendente dal sistema operativo.
-Modulo richiesto: path*/
+Modulo richiesto: path */
 const path = require('path');
 
 const ROOT_DIR = path.resolve(__dirname, '..');
