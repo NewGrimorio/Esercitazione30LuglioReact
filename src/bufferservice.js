@@ -1,4 +1,5 @@
-/* L'applicazione dovrà convertire una stringa in Buffer e mostrarne:
+/* 4. Gestione dei Buffer
+L'applicazione dovrà convertire una stringa in Buffer e mostrarne:
     - la rappresentazione in binario e Base64
     - riconvertire alla stringa originale 
 */

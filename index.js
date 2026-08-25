@@ -7,6 +7,11 @@ const bufferService = require('./src/bufferservice');
 const cryptoService = require('./src/cryptoservice');
 const systemService = require('./src/systemservice');
 const httpService = require('./src/httpservice');
+const timerService = require('./src/timerservice');
+const assertService = require('./src/assertservice');
+const util = require('util');
+
+
 
 // File di input: da riga di comando, altrimenti default.
 const fileName = process.argv[2] || 'Divina_Commedia_Inferno_Canto_I.txt';
@@ -78,18 +83,25 @@ async function main() {
         }
         await cryptoService.runCryptoDemo(paths.upper, ask);
         break;
-      case '4':
-        systemService.getSystemInfo();
+      case '4': {
+        const info = systemService.getSystemInfo();
+        // Punto 11: ispezione di oggetti con util.inspect
+        console.log(util.inspect(info, { depth: null, colors: true }));
         break;
+      }
       case '5':
         await httpService.startServer(paths.upper);
         console.log('Il menu resta attivo: puoi continuare a usare le altre operazioni.');
         break;
       case '6':
-        console.log('TODO: punto 9 (timers)');
+        await timerService.runTimersDemo(fileName);
         break;
       case '7':
-        console.log('TODO: punti 10 e 11 (assert, util)');
+        try {
+          await assertService.runAssertionsDemo(fileName);
+        } catch (err) {
+         console.error('Verifica fallita:', err.message);
+       }
         break;
       case '0':
         console.log('Uscita.');

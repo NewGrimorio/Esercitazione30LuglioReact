@@ -48,10 +48,17 @@ function fileExists(filePath) {
   return fs.existsSync(filePath);
 }
 
+// Scrive una stringa su file, creando le cartelle mancanti.
+async function writeTextFile(filePath, content) {
+  await ensureDir(path.dirname(filePath));
+  await fs.promises.writeFile(filePath, content, 'utf8');
+}
+
 module.exports = {
   readTextFile,
   ensureDir,
   createUpperCaseCopy,
+  writeTextFile,
   createUpperCaseTransform,
   fileExists,
 };
