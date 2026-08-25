@@ -5,6 +5,8 @@ const { buildPaths } = require('./src/paths');
 const fileService = require('./src/fileservice');
 const bufferService = require('./src/bufferservice');
 const cryptoService = require('./src/cryptoservice');
+const systemService = require('./src/systemservice');
+const httpService = require('./src/httpservice');
 
 // File di input: da riga di comando, altrimenti default.
 const fileName = process.argv[2] || 'Divina_Commedia_Inferno_Canto_I.txt';
@@ -15,7 +17,7 @@ const rl = readline.createInterface({
   output: process.stdout,
 });
 
-// Versione Promise di rl.question per poter usare async/await.
+/** Versione Promise di rl.question, così possiamo usare await. */
 function ask(question) {
   return new Promise((resolve) => rl.question(question, resolve));
 }
@@ -71,26 +73,17 @@ async function main() {
       }
       case '3':
         if (!fileService.fileExists(paths.upper)) {
-            console.log("Esegui prima l'operazione 1 per generare il file elaborato.");
-        break;
-        }else{
-            await cryptoService.runCryptoDemo(paths.upper, ask);
-            break;
+          console.log("Esegui prima l'operazione 1 per generare il file elaborato.");
+          break;
         }
-      case '4':
-        console.log('TODO: punto 6 (os)');
-        break;
-      case '5':
-        console.log('TODO: punti 7 e 8 (http, url)');
-        break;
-      case '6':
-        console.log('TODO: punto 9 (timers)');
+        await cryptoService.runCryptoDemo(paths.upper, ask);
         break;
       case '4':
-        console.log('TODO: punto 6 (os)');
+        systemService.getSystemInfo();
         break;
       case '5':
-        console.log('TODO: punti 7 e 8 (http, url)');
+        await httpService.startServer(paths.upper);
+        console.log('Il menu resta attivo: puoi continuare a usare le altre operazioni.');
         break;
       case '6':
         console.log('TODO: punto 9 (timers)');
@@ -100,6 +93,7 @@ async function main() {
         break;
       case '0':
         console.log('Uscita.');
+        await httpService.stopServer();
         running = false;
         break;
       default:

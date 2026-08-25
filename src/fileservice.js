@@ -13,10 +13,7 @@ const { Transform } = require('stream');
 const { pipeline } = require('stream/promises');
 const path = require('path');
 
-/* Stream di trasformazione: converte in maiuscolo ogni chunk che lo attraversa.
- * I chunk arrivano uno alla volta (64 KB di default), quindi il file
- * non viene mai caricato interamente in memoria.
- */
+//Stream di trasformazione che converte il contenuto in maiuscolo.
 function createUpperCaseTransform() {
   return new Transform({
     transform(chunk, encoding, callback) {
@@ -25,8 +22,7 @@ function createUpperCaseTransform() {
   });
 }
 
-/* Legge un file di testo e lo restituisce come stringa.
- * (Usato solo per stampare a video: la trasformazione vera usa gli stream.)*/
+//Legge un file di testo e lo restituisce come stringa.
 async function readTextFile(filePath) {
   return fs.promises.readFile(filePath, 'utf8');
 }
@@ -36,9 +32,7 @@ async function ensureDir(dirPath) {
   await fs.promises.mkdir(dirPath, { recursive: true });
 }
 
-/* Crea una copia del file con il contenuto in maiuscolo, usando una pipeline:
- *   ReadStream -> Transform (uppercase) -> WriteStream
- */
+//Crea una copia del file trasformandone il contenuto in maiuscolo, usando gli Stream.
 async function createUpperCaseCopy(inputPath, outputPath) {
   await ensureDir(path.dirname(outputPath));
   await pipeline(
