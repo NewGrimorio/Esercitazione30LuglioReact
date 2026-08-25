@@ -1,0 +1,93 @@
+//Implementare le seguenti funzionalità:
+//calcolo dell'hash SHA-256 del file;
+//cifratura del file;
+//(facoltativo) decifratura del file.
+// Modulo richiesto: crypto
+const crypto = require('crypto');
+const fs = require('fs');
+const path = require('path');
+
+// Cartella di output, calcolata rispetto al progetto e non alla directory di lancio.
+const OUTPUT_DIR = path.join(__dirname, '..', 'output');
+
+// Calcola l'hash SHA-256 di un file e restituisce l'hash in formato esadecimale.
+function calculateSHA256(filePath) {
+    const hash = crypto.createHash('sha256');
+    const fileBuffer = fs.readFileSync(filePath);
+    hash.update(fileBuffer);
+    return hash.digest('hex');
+}
+
+/* Cifra un file usando AES-256-CBC e una password, restituendo
+ l'IV e il contenuto cifrato.
+ L'IV è un valore casuale utilizzato
+ per garantire che lo stesso messaggio cifrato produca risultati diversi. */
+function encryptFile(filePath, password) {
+    const algorithm = 'aes-256-cbc';
+    const key = crypto.scryptSync(password, 'salt', 32);
+    const iv = crypto.randomBytes(16);
+    const cipher = crypto.createCipheriv(algorithm, key, iv);
+    const input = fs.readFileSync(filePath);
+    const encrypted = Buffer.concat([cipher.update(input), cipher.final()]);
+    return { iv, encrypted };
+}
+
+// Decifra un file cifrato usando AES-256-CBC, la password e l'IV.
+function decryptFile(filePath, password, iv) {
+    const algorithm = 'aes-256-cbc';
+    const key = crypto.scryptSync(password, 'salt', 32);
+    const decipher = crypto.createDecipheriv(algorithm, key, iv);
+    const encryptedBuffer = fs.readFileSync(filePath);
+    return Buffer.concat([decipher.update(encryptedBuffer), decipher.final()]);
+}
+
+// `ask` è la funzione di index.js che pone una domanda all'utente via readline.
+async function runCryptoDemo(filePath, ask) {
+    console.log("Calcolo dell'hash SHA-256 del file:", filePath);
+    const hash = calculateSHA256(filePath);
+    console.log("Hash SHA-256:", hash);
+
+    // Chiedo se cifrare il file
+    const wantEncrypt = (await ask('Vuoi cifrare il file? (s/n): ')).trim().toLowerCase();
+    switch (wantEncrypt) {
+        case 's': {
+            console.log("Cifratura del file:", filePath);
+            const password = 'cifraggio'; // Password
+            const { iv, encrypted } = encryptFile(filePath, password);
+            console.log("IV:", iv);
+            console.log("Contenuto cifrato:", encrypted);
+
+            // Il file cifrato viene salvato in output/encrypted.bin per eventuali test di decifratura.
+            fs.mkdirSync(OUTPUT_DIR, { recursive: true });
+            const encryptedPath = path.join(OUTPUT_DIR, 'encrypted.bin');
+            fs.writeFileSync(encryptedPath, encrypted);
+            console.log("File cifrato salvato in:", encryptedPath);
+
+            // Chiedo se decifrare il file appena cifrato
+            const wantDecrypt = (await ask('Vuoi decifrare il file? (s/n): ')).trim().toLowerCase();
+            switch (wantDecrypt) {
+                case 's': {
+                    const decrypted = decryptFile(encryptedPath, password, iv);
+                    const decryptedPath = path.join(OUTPUT_DIR, 'decrypted.txt');
+                    fs.writeFileSync(decryptedPath, decrypted);
+                    console.log("File decifrato salvato in:", decryptedPath);
+                    console.log("Contenuto decifrato:", decrypted.toString('utf8'));
+                    return { hash, iv, encryptedPath, decryptedPath };
+                }
+                default:
+                    // File cifrato senza decifratura
+                    return { hash, iv, encryptedPath };
+            }
+        }
+        default:
+            console.log("Operazione interrotta dall'utente.");
+            return { hash };
+    }
+}
+
+module.exports = {
+    calculateSHA256,
+    runCryptoDemo,
+    encryptFile,
+    decryptFile
+};

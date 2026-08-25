@@ -6,8 +6,7 @@ const ROOT_DIR = path.resolve(__dirname, '..');
 const INPUT_DIR = path.join(ROOT_DIR, 'input');
 const OUTPUT_DIR = path.join(ROOT_DIR, 'output');
 
-/**
- * Restituisce tutti i percorsi derivati da un nome file di input.
+/* Restituisce tutti i percorsi derivati da un nome file di input.
  * Es. "esempio.txt" -> esempio.upper.txt, esempio.enc, esempio.dec.txt
  */
 function buildPaths(fileName) {
