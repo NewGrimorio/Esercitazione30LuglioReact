@@ -1,0 +1,14 @@
+{
+  "name": "esercitazione-30luglio2026",
+  "version": "1.0.0",
+  "description": "Esercitazione: elaborazione, protezione e condivisione di file di testo con i moduli core di Node.js",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "node src/checks.js"
+  },
+  "keywords": ["node", "fs", "stream", "crypto", "http"],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}
